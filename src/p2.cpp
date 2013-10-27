@@ -33,7 +33,6 @@ int main()
 {
 	// Definiamo un'istanza di Pallina al centro
 	// della finestra
-	int i{1};
 	Pallina pallina{lunghezzaFinestra / 2, altezzaFinestra / 2};
 
 	RenderWindow finestra{{lunghezzaFinestra, altezzaFinestra}, "Arkanoid - 2"};
