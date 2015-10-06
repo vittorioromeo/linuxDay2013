@@ -5,69 +5,72 @@ using namespace std;
 using namespace sf;
 
 constexpr int lunghezzaFinestra{800}, altezzaFinestra{600};
-constexpr float	raggioPallina{10.f}, velocitàPallina{8.f};
+constexpr float raggioPallina{10.f}, velocitàPallina{8.f};
 
 struct Pallina
 {
-	CircleShape forma;
-	Vector2f velocità{-velocitàPallina, -velocitàPallina};
+    CircleShape forma;
+    Vector2f velocità{-velocitàPallina, -velocitàPallina};
 
-	Pallina(float mX, float mY) 
-	{
-		forma.setPosition(mX, mY);
-		forma.setRadius(raggioPallina);
-		forma.setFillColor(Color::Red);
-		forma.setOrigin(raggioPallina, raggioPallina);
-	}	
+    Pallina(float mX, float mY)
+    {
+        forma.setPosition(mX, mY);
+        forma.setRadius(raggioPallina);
+        forma.setFillColor(Color::Red);
+        forma.setOrigin(raggioPallina, raggioPallina);
+    }
 
-	void muovi(Vector2f mVelocità) { forma.move(mVelocità); }
-	void update() 
-	{ 
-		muovi(velocità); 
-		
-		// Evitiamo che la pallina esca fuori dallo schermo
+    void muovi(Vector2f mVelocità) { forma.move(mVelocità); }
+    void update()
+    {
+        muovi(velocità);
 
-		// Se sta uscendo a sx, settiamo la velocità 
-		// orizzontale ad un valore positivo (verso dx)
-		if(sx() < 0) velocità.x = velocitàPallina;
+        // Evitiamo che la pallina esca fuori dallo schermo
 
-		// Altrimenti, se sta uscendo a dx, settiamo la
-		// velocità orizzontale ad un valore negativo (verso sx)
-		else if(dx() > lunghezzaFinestra) velocità.x = -velocitàPallina;
+        // Se sta uscendo a sx, settiamo la velocità
+        // orizzontale ad un valore positivo (verso dx)
+        if(sx() < 0) velocità.x = velocitàPallina;
 
-		// Applichiamo lo stesso concetto per sopra/sotto
-		if(sopra() < 0) velocità.y = velocitàPallina;
-		else if(sotto() > altezzaFinestra) velocità.y = -velocitàPallina;
-	}
+        // Altrimenti, se sta uscendo a dx, settiamo la
+        // velocità orizzontale ad un valore negativo (verso sx)
+        else if(dx() > lunghezzaFinestra)
+            velocità.x = -velocitàPallina;
 
-	// Metodi `proprietà` o `getter`
-	// per ottenere valori comuni
-	float x() { return forma.getPosition().x; }
-	float y() { return forma.getPosition().y; }
-	float sx() { return x() - forma.getRadius(); }
-	float dx() { return x() + forma.getRadius(); }
-	float sopra() { return y() - forma.getRadius(); }
-	float sotto() { return y() + forma.getRadius(); }
+        // Applichiamo lo stesso concetto per sopra/sotto
+        if(sopra() < 0)
+            velocità.y = velocitàPallina;
+        else if(sotto() > altezzaFinestra)
+            velocità.y = -velocitàPallina;
+    }
+
+    // Metodi `proprietà` o `getter`
+    // per ottenere valori comuni
+    float x() { return forma.getPosition().x; }
+    float y() { return forma.getPosition().y; }
+    float sx() { return x() - forma.getRadius(); }
+    float dx() { return x() + forma.getRadius(); }
+    float sopra() { return y() - forma.getRadius(); }
+    float sotto() { return y() + forma.getRadius(); }
 };
 
-int main() 
+int main()
 {
-	Pallina pallina{lunghezzaFinestra / 2, altezzaFinestra / 2};
+    Pallina pallina{lunghezzaFinestra / 2, altezzaFinestra / 2};
 
-	RenderWindow finestra{{lunghezzaFinestra, altezzaFinestra}, "Arkanoid - 4"};
-	finestra.setFramerateLimit(60);
-	
-	while(true)
-	{
-		finestra.clear(Color::Black);
+    RenderWindow finestra{{lunghezzaFinestra, altezzaFinestra}, "Arkanoid - 4"};
+    finestra.setFramerateLimit(60);
 
-		if(Keyboard::isKeyPressed(Keyboard::Key::Escape)) break;
+    while(true)
+    {
+        finestra.clear(Color::Black);
 
-		pallina.update();
+        if(Keyboard::isKeyPressed(Keyboard::Key::Escape)) break;
 
-		finestra.draw(pallina.forma);
-		finestra.display();
-	}	
+        pallina.update();
 
-	return 0;
+        finestra.draw(pallina.forma);
+        finestra.display();
+    }
+
+    return 0;
 }
